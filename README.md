@@ -53,6 +53,11 @@ IT-Metrics-Dashboard
 └── ITSM_BRD.docx
 ```
 
+## Project Documents
+
+- [Business Requirements Document](BRD/ITSM_BRD.pdf)
+
+
 ## Author
 
 Harshal Bhavsar
