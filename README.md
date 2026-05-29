@@ -55,8 +55,7 @@ IT-Metrics-Dashboard
 
 ## Project Documents
 
-- [Business Requirements Document](BRD/ITSM_BRD.pdf)
-
+[Business Requirements Document](BRD/IT_Metrics_Dashboard_BRD.pdf)
 
 ## Author
 
