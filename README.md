@@ -75,15 +75,21 @@ Enable data-driven operational decision-making
 | [Business Requirements Document (BRD)](Docs/01_BRD.pdf) | Comprehensive business requirements document. |
 | [User Stories & Acceptance Criteria](Docs/02_User-Stories.pdf) | Agile user stories, acceptance criteria, priorities, dependencies, and story point estimates for the IT Metrics Dashboard solution. |
 
-### Planned Deliverables
+### Project Deliverables Status
 
-* Comprehensive Business Requirement Document
-* User Stories & Acceptance Criteria
-* Process Flow Diagrams
-* Requirements Traceability Matrix (RTM)
-* Dashboard Wireframes
-* UAT Test Cases
-* Dashboard Prototype
+| Deliverable                            | Status         |
+| -------------------------------------- | -------------- |
+| Business Requirements Document (BRD)   | ✅ Completed    |
+| User Stories & Acceptance Criteria     | ✅ Completed    |
+| Process Mapping (As-Is / To-Be)        | ✅ Completed    |
+| Gap Analysis                           | ✅ Completed    |
+| ITIL Maturity Assessment               | ✅ Completed    |
+| Dashboard Wireframes                   | 🚧 In Progress |
+| Requirements Traceability Matrix (RTM) | 🚧 In Progress |
+| UAT Test Cases                         | 📌 Planned     |
+| Dashboard Prototype                    | 📌 Planned     |
+| ServiceNow Integration Design          | 📌 Planned     |
+| Dashboard Screenshots                  | 📌 Planned     |
 
 ---
 
