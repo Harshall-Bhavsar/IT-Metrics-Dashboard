@@ -70,9 +70,10 @@ Enable data-driven operational decision-making
 
 ## Project Documents
 
-| Document                                                                  | Description                                                                                                                                                                             |
-| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Business Requirements Document (BRD)](Docs/IT_Metrics_Dashboard_BRD.pdf) | Comprehensive business requirements covering objectives, stakeholders, functional requirements, non-functional requirements, risks, dependencies, success criteria, and ITIL alignment. |
+| Document | Description |
+|-----------|-------------|
+| [Business Requirements Document (BRD)](Docs/IT_Metrics_Dashboard_BRD.pdf) | Comprehensive business requirements document. |
+| [User Stories & Acceptance Criteria](Docs/IT_Metrics_Dashboard_UserStories.pdf) | Agile user stories, acceptance criteria, priorities, dependencies, and story point estimates for the IT Metrics Dashboard solution. |
 
 ### Planned Deliverables
 
