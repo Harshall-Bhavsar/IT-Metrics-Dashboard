@@ -77,6 +77,7 @@ Enable data-driven operational decision-making
 
 ### Planned Deliverables
 
+* Comprehensive Business Requirement Document
 * User Stories & Acceptance Criteria
 * Process Flow Diagrams
 * Requirements Traceability Matrix (RTM)
