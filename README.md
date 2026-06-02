@@ -72,8 +72,8 @@ Enable data-driven operational decision-making
 
 | Document | Description |
 |-----------|-------------|
-| [Business Requirements Document (BRD)](Docs/IT_Metrics_Dashboard_BRD.pdf) | Comprehensive business requirements document. |
-| [User Stories & Acceptance Criteria](Docs/IT_Metrics_Dashboard_UserStories.pdf) | Agile user stories, acceptance criteria, priorities, dependencies, and story point estimates for the IT Metrics Dashboard solution. |
+| [Business Requirements Document (BRD)](Docs/01_BRD.pdf) | Comprehensive business requirements document. |
+| [User Stories & Acceptance Criteria](02_User-Stories.pdf) | Agile user stories, acceptance criteria, priorities, dependencies, and story point estimates for the IT Metrics Dashboard solution. |
 
 ### Planned Deliverables
 
