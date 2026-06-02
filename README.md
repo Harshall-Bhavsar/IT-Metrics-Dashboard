@@ -219,18 +219,27 @@ IT-Metrics-Dashboard
 ├── README.md
 │
 ├── Docs/
-│   └── IT_Metrics_Dashboard_BRD.pdf
+│   ├── BRD.pdf
+│   ├── UserStories.pdf
+│   │
+│   └── Process_Maps/
+│       ├── Master_Index.md
+│       ├── Incident_Management_Process.md
+│       ├── Problem_Management_Process.md
+│       └── Change_Management_Process.md
 │
 ├── Wireframes/
-│   └── (Coming Soon)
+│   └── (Planned)
 │
-├── Screenshots/
-│   └── (Coming Soon)
+├── RTM/
+│   └── (Planned)
 │
-└── src/
-    └── (Future Implementation)
+├── UAT/
+│   └── (Planned)
+│
+└── Screenshots/
+    └── (Planned)
 ```
-
 ---
 
 ## About This Repository
