@@ -1,12 +1,12 @@
 # IT Metrics Dashboard
-**Business Analysis Portfolio Project**  
+**Business Analysis Portfolio Project**
 Author: Harshall Bhavsar | Business Analyst | ITSM | ITIL | ServiceNow
 
 ---
 
 ## Project Summary
 
-A end-to-end Business Analysis portfolio project for a 250-person IT services company struggling with manual reporting, poor SLA visibility, and reactive incident management.
+An end-to-end Business Analysis portfolio project for a 250-person IT services company struggling with manual reporting, poor SLA visibility, and reactive incident management.
 
 This project covers the full BA lifecycle: problem definition, requirements gathering, process mapping, system design, and proof-of-concept scripting.
 
@@ -50,47 +50,48 @@ IT-Metrics-Dashboard/
 ├── README.md
 │
 ├── BRD/
-│   └── 01_Business_Requirements_Document      # 3,500+ line enterprise-grade BRD
+│   └── 01_Business_Requirements_Document.pdf
 │
 ├── 02_User_Stories/
-│   └── User_Stories                           # 10 user stories, 31 story points, acceptance criteria
+│   └── 02_User_Stories.pdf
 │
 ├── 03_Process_Maps/
-│   ├── 00_PROCESS_MAPS_INDEX                  # Master index + cross-process summary
-│   ├── 01_Incident_Management_Process         # As-Is → To-Be with gap analysis
-│   ├── 02_Problem_Management_Process          # Includes KEDB structure design
-│   └── 03_Change_Management_Process           # Includes CAB charter
+│   ├── 00_Process_Maps_Index.md
+│   ├── 01_Incident_Management_Process.md
+│   ├── 02_Problem_Management_Process.md
+│   └── 03_Change_Management_Process.md
 │
-├── 04_System_Architecture/
-│   └── 04_System_Architecture                 # 3-layer architecture with data flow narrative
+├── 04_System_Architecture/          ← Coming Week 3
+│   └── 04_System_Architecture.md
 │
-├── 05_Python_Analysis/
-│   ├── analyze_incidents.py                   # Analysis script (zero dependencies)
-│   ├── sample_incidents.csv                   # 200 realistic incidents
+├── 05_Python_Analysis/              ← Coming Week 3
+│   ├── analyze_incidents.py
+│   ├── sample_incidents.csv
 │   └── reports/
-│       ├── summary_overall_kpis.csv
-│       ├── summary_by_priority.csv
-│       ├── summary_by_category.csv
-│       └── summary_by_engineer.csv
+│
+├── 06_Dashboard/                    ← Coming Week 3
+│   └── index.html
+│
+└── 07_Analysis_Report/              ← Coming Week 3
+    └── analysis_report.md
 ```
 
 ---
 
-## Sample Script Output
+## Project Deliverables
 
-```
-════════════════════════════════════════════════════════════
-  IT METRICS DASHBOARD — INCIDENT ANALYSIS REPORT
-════════════════════════════════════════════════════════════
-
-  OVERALL KPIs
-  Total incidents analysed : 200
-  Average MTTR             : 8.4h  (baseline: 10.2h)
-  MTTR improvement         : ▼ 17.6% vs baseline
-  SLA compliance           : 91.0% (baseline: 82.0%)
-  SLA improvement          : ▲ 9.0 pts vs baseline
-  Total SLA breaches       : 18
-```
+| # | Deliverable | Status | Link |
+|---|------------|--------|------|
+| 1 | Business Requirements Document | ✅ Complete | [View BRD](BRD/01_Business_Requirements_Document.pdf) |
+| 2 | User Stories (10 stories, 31 pts) | ✅ Complete | [View User Stories](02_User_Stories/02_User_Stories.pdf) |
+| 3 | Incident Management Process Map | ✅ Complete | [View](03_Process_Maps/01_Incident_Management_Process.md) |
+| 4 | Problem Management Process Map | ✅ Complete | [View](03_Process_Maps/02_Problem_Management_Process.md) |
+| 5 | Change Management Process Map | ✅ Complete | [View](03_Process_Maps/03_Change_Management_Process.md) |
+| 6 | Process Maps Master Index | ✅ Complete | [View](03_Process_Maps/00_Process_Maps_Index.md) |
+| 7 | System Architecture Diagram | 🔄 In Progress | Coming Week 3 |
+| 8 | Python Analysis Script | 🔄 In Progress | Coming Week 3 |
+| 9 | Live KPI Dashboard | 🔄 In Progress | Coming Week 3 |
+| 10 | Analysis Report & Recommendations | 🔄 In Progress | Coming Week 3 |
 
 ---
 
@@ -114,20 +115,8 @@ IT-Metrics-Dashboard/
 - System architecture (BA-level)
 - Python scripting for data analysis
 - KPI definition and metrics design
-- Stakeholder perspective mapping (engineer / manager / leadership)
+- Stakeholder perspective mapping
 - ROI and business case analysis
-
----
-
-## How to Run the Analysis Script
-
-```bash
-# No installation needed — standard Python 3.7+ only
-python analyze_incidents.py
-
-# Custom input file
-python analyze_incidents.py --input your_incidents.csv --output reports/
-```
 
 ---
 
