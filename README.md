@@ -77,6 +77,7 @@ Enable data-driven operational decision-making
 | [Process Mapping Master Index](Docs/Process_Maps/00_Master_Index.md) | Overview of ITIL-aligned process improvements, gap analysis, process mapping approach, maturity assessment, and business outcomes for the IT Metrics Dashboard project. |
 | [Incident Management Process Map](Docs/Process_Maps/01_Incident_Management_Process.md) | As-Is and To-Be Incident Management workflows, gap analysis, ITIL maturity assessment, and business impact analysis. |
 | [Problem Management Process Map](Docs/Process_Maps/02_Problem_Management_Process.md) | As-Is and To-Be Problem Management workflows, root cause analysis process, KEDB structure, recurrence management, and ITIL maturity assessment. |
+| [Change Management Process Map](Docs/Process_Maps/03_Change_Management_Process.md) | As-Is and To-Be Change Management workflows, CAB governance, change lifecycle, ITIL maturity assessment, and change performance metrics. |
 
 ### Project Deliverables Status
 
