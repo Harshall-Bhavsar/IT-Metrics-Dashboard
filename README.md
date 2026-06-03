@@ -85,7 +85,7 @@ IT-Metrics-Dashboard/
 | # | Deliverable | Status | Link |
 |---|------------|--------|------|
 | 1 | Business Requirements Document | ✅ Complete | [View BRD](BRD/01_Business_Requirements_Document.pdf) |
-| 2 | User Stories (10 stories, 31 pts) | ✅ Complete | [View User Stories](02_User_Stories/02_User_Stories.pdf) |
+| 2 | User Stories (11 stories, 32 pts) | ✅ Complete | [View User Stories](02_User_Stories/02_User_Stories.pdf) |
 | 3 | Incident Management Process Map | ✅ Complete | [View](03_Process_Maps/01_Incident_Management_Process.md) |
 | 4 | Problem Management Process Map | ✅ Complete | [View](03_Process_Maps/02_Problem_Management_Process.md) |
 | 5 | Change Management Process Map | ✅ Complete | [View](03_Process_Maps/03_Change_Management_Process.md) |
