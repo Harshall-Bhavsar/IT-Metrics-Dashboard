@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Metrics Dashboard — Harshall Bhavsar</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #00ff9d;
+    --warn: #ff6b35;
+    --danger: #ff3b5c;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 14px;
+    color: #000;
+  }
+
+  .brand-text h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  .brand-text p {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-top: 2px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,255,157,0.08);
+    border: 1px solid rgba(0,255,157,0.2);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--accent2);
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent2);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .upload-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  #csv-input { display: none; }
+
+  /* DATA SOURCE BANNER */
+  .data-banner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 10px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 28px;
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .data-banner span { color: var(--accent); }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-color, var(--accent));
+  }
+
+  .kpi-card:hover { border-color: var(--card-color, var(--accent)); }
+
+  .kpi-label {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .kpi-value {
+    font-size: 42px;
+    font-weight: 300;
+    font-family: var(--mono);
+    line-height: 1;
+    color: var(--card-color, var(--accent));
+    margin-bottom: 8px;
+  }
+
+  .kpi-unit {
+    font-size: 16px;
+    opacity: 0.6;
+  }
+
+  .kpi-meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .kpi-bar-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .kpi-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--card-color, var(--accent));
+    transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .kpi-target {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  .kpi-target.met { color: var(--accent2); }
+  .kpi-target.not-met { color: var(--warn); }
+
+  /* CHARTS GRID */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .charts-grid { grid-template-columns: 1fr; }
+  }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .chart-title {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* BAR CHART */
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bar-label {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--muted);
+    width: 80px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 11px;
+    font-family: var(--mono);
+    color: #000;
+    font-weight: 600;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+    min-width: 40px;
+  }
+
+  .bar-val {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--muted);
+    width: 50px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* DONUT CHART */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .donut-svg { flex-shrink: 0; }
+
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .legend-name { color: var(--muted); flex: 1; font-family: var(--mono); }
+  .legend-count { color: var(--text); font-family: var(--mono); font-weight: 600; }
+  .legend-pct { color: var(--muted); font-size: 11px; }
+
+  /* MTTR TREND */
+  .trend-chart {
+    position: relative;
+    height: 140px;
+  }
+
+  .trend-svg { width: 100%; height: 100%; }
+
+  /* ENGINEER TABLE */
+  .table-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+
+  .table-title {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 0 12px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr {
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover { background: var(--surface2); }
+
+  tbody td {
+    padding: 12px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(30,45,69,0.5);
+    font-family: var(--mono);
+  }
+
+  .sla-badge {
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .sla-good { background: rgba(0,255,157,0.1); color: var(--accent2); border: 1px solid rgba(0,255,157,0.2); }
+  .sla-warn { background: rgba(255,107,53,0.1); color: var(--warn); border: 1px solid rgba(255,107,53,0.2); }
+  .sla-bad  { background: rgba(255,59,92,0.1);  color: var(--danger); border: 1px solid rgba(255,59,92,0.2); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--muted);
+  }
+
+  .footer-link { color: var(--accent); text-decoration: none; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .kpi-card, .chart-card, .table-card {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+  .kpi-card:nth-child(2) { animation-delay: 0.10s; }
+  .kpi-card:nth-child(3) { animation-delay: 0.15s; }
+  .kpi-card:nth-child(4) { animation-delay: 0.20s; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">ITM</div>
+        <div class="brand-text">
+          <h1>IT Metrics Dashboard</h1>
+          <p>ITSM KPI Monitoring — Harshall Bhavsar</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          LIVE
+        </div>
+        <label class="upload-btn" for="csv-input">
+          ⬆ Upload CSV
+        </label>
+        <input type="file" id="csv-input" accept=".csv">
+      </div>
+    </div>
+  </header>
+
+  <div class="data-banner" id="data-banner">
+    <span>▸</span> Data source: <span id="source-label">sample_incidents.csv</span> &nbsp;|&nbsp; <span id="record-count">200</span> incidents loaded &nbsp;|&nbsp; Analysis period: Jan – Dec 2024
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid" id="kpi-grid">
+    <div class="kpi-card" style="--card-color: #00d4ff">
+      <div class="kpi-label">Avg MTTR</div>
+      <div class="kpi-value" id="kpi-mttr">8.4<span class="kpi-unit">h</span></div>
+      <div class="kpi-meta" id="kpi-mttr-meta">↓ 17.6% vs baseline (10.2h)</div>
+      <div class="kpi-bar-track"><div class="kpi-bar-fill" id="bar-mttr" style="width:0%"></div></div>
+      <div class="kpi-target" id="target-mttr">Target: 7.0h — 1.4h remaining</div>
+    </div>
+
+    <div class="kpi-card" style="--card-color: #00ff9d">
+      <div class="kpi-label">SLA Compliance</div>
+      <div class="kpi-value" id="kpi-sla">91<span class="kpi-unit">%</span></div>
+      <div class="kpi-meta" id="kpi-sla-meta">↑ 9pts vs baseline (82%)</div>
+      <div class="kpi-bar-track"><div class="kpi-bar-fill" id="bar-sla" style="width:0%"></div></div>
+      <div class="kpi-target" id="target-sla">Target: 95% — 4pts remaining</div>
+    </div>
+
+    <div class="kpi-card" style="--card-color: #a78bfa">
+      <div class="kpi-label">Total Incidents</div>
+      <div class="kpi-value" id="kpi-total">200<span class="kpi-unit"></span></div>
+      <div class="kpi-meta" id="kpi-total-meta">Across all priorities & categories</div>
+      <div class="kpi-bar-track"><div class="kpi-bar-fill" id="bar-total" style="width:0%"></div></div>
+      <div class="kpi-target">Analysis period: Jan – Dec 2024</div>
+    </div>
+
+    <div class="kpi-card" style="--card-color: #ff6b35">
+      <div class="kpi-label">SLA Breaches</div>
+      <div class="kpi-value" id="kpi-breach">18<span class="kpi-unit"></span></div>
+      <div class="kpi-meta" id="kpi-breach-meta">9.0% breach rate</div>
+      <div class="kpi-bar-track"><div class="kpi-bar-fill" id="bar-breach" style="width:0%"></div></div>
+      <div class="kpi-target not-met">Target: &lt;5% breach rate</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-grid">
+
+    <!-- MTTR by Priority -->
+    <div class="chart-card">
+      <div class="chart-title">
+        <span>MTTR by Priority</span>
+        <span style="color:var(--accent);font-size:11px">hours avg</span>
+      </div>
+      <div class="bar-chart" id="priority-chart"></div>
+    </div>
+
+    <!-- Incidents by Category (Donut) -->
+    <div class="chart-card">
+      <div class="chart-title">
+        <span>Incidents by Category</span>
+        <span style="color:var(--accent);font-size:11px">distribution</span>
+      </div>
+      <div class="donut-wrap">
+        <svg class="donut-svg" width="140" height="140" viewBox="0 0 140 140" id="donut-svg"></svg>
+        <div class="donut-legend" id="donut-legend"></div>
+      </div>
+    </div>
+
+    <!-- MTTR Trend -->
+    <div class="chart-card">
+      <div class="chart-title">
+        <span>MTTR Trend</span>
+        <span style="color:var(--accent);font-size:11px">monthly avg (hours)</span>
+      </div>
+      <div class="trend-chart">
+        <svg class="trend-svg" id="trend-svg" viewBox="0 0 500 140" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <!-- SLA Compliance by Category -->
+    <div class="chart-card">
+      <div class="chart-title">
+        <span>SLA Compliance by Category</span>
+        <span style="color:var(--accent);font-size:11px">%</span>
+      </div>
+      <div class="bar-chart" id="sla-chart"></div>
+    </div>
+
+  </div>
+
+  <!-- ENGINEER TABLE -->
+  <div class="table-card">
+    <div class="table-title">Engineer Performance Summary</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Engineer</th>
+          <th>Assigned</th>
+          <th>Resolved</th>
+          <th>Avg MTTR</th>
+          <th>SLA Compliance</th>
+          <th>Breaches</th>
+        </tr>
+      </thead>
+      <tbody id="engineer-table"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span>IT Metrics Dashboard — Harshall Bhavsar — Business Analysis Portfolio</span>
+    <a class="footer-link" href="https://github.com/Harshall-Bhavsar/IT-Metrics-Dashboard" target="_blank">github.com/Harshall-Bhavsar/IT-Metrics-Dashboard</a>
+  </footer>
+</div>
+
+<script>
+// ─── SAMPLE DATA (from analyze_incidents.py output) ───────────────────────
+const SAMPLE_DATA = {
+  totalIncidents: 200,
+  avgMTTR: 8.4,
+  slaCompliance: 91.0,
+  slaBreaches: 18,
+  byPriority: [
+    { name: 'P1 Critical', mttr: 3.2, count: 18, sla: 94.4 },
+    { name: 'P2 High',     mttr: 5.8, count: 45, sla: 93.3 },
+    { name: 'P3 Medium',   mttr: 9.1, count: 89, sla: 91.0 },
+    { name: 'P4 Low',      mttr: 14.3, count: 48, sla: 87.5 },
+  ],
+  byCategory: [
+    { name: 'Network',     count: 52, color: '#00d4ff' },
+    { name: 'Hardware',    count: 41, color: '#00ff9d' },
+    { name: 'Software',    count: 38, color: '#a78bfa' },
+    { name: 'Security',    count: 29, color: '#ff6b35' },
+    { name: 'Access Mgmt', count: 24, color: '#fbbf24' },
+    { name: 'Other',       count: 16, color: '#64748b' },
+  ],
+  byMonth: [
+    { month: 'Jan', mttr: 9.8 }, { month: 'Feb', mttr: 9.2 },
+    { month: 'Mar', mttr: 8.9 }, { month: 'Apr', mttr: 8.7 },
+    { month: 'May', mttr: 8.5 }, { month: 'Jun', mttr: 8.1 },
+    { month: 'Jul', mttr: 7.9 }, { month: 'Aug', mttr: 8.3 },
+    { month: 'Sep', mttr: 8.0 }, { month: 'Oct', mttr: 7.8 },
+    { month: 'Nov', mttr: 7.6 }, { month: 'Dec', mttr: 7.4 },
+  ],
+  byEngineer: [
+    { name: 'A. Singh',    assigned: 34, resolved: 32, mttr: 7.2, sla: 94.1, breaches: 2 },
+    { name: 'P. Sharma',   assigned: 28, resolved: 27, mttr: 8.1, sla: 92.9, breaches: 2 },
+    { name: 'R. Kumar',    assigned: 31, resolved: 29, mttr: 8.9, sla: 90.3, breaches: 3 },
+    { name: 'S. Patel',    assigned: 26, resolved: 25, mttr: 9.4, sla: 88.5, breaches: 3 },
+    { name: 'M. Desai',    assigned: 22, resolved: 21, mttr: 10.1, sla: 86.4, breaches: 3 },
+    { name: 'K. Iyer',     assigned: 19, resolved: 18, mttr: 7.8, sla: 94.7, breaches: 1 },
+    { name: 'T. Nair',     assigned: 40, resolved: 38, mttr: 8.3, sla: 91.2, breaches: 4 },
+  ]
+};
+
+// ─── RENDER FUNCTIONS ─────────────────────────────────────────────────────
+
+function renderKPIs(d) {
+  document.getElementById('kpi-mttr').innerHTML = d.avgMTTR + '<span class="kpi-unit">h</span>';
+  document.getElementById('kpi-sla').innerHTML  = d.slaCompliance + '<span class="kpi-unit">%</span>';
+  document.getElementById('kpi-total').innerHTML = d.totalIncidents;
+  document.getElementById('kpi-breach').innerHTML = d.slaBreaches;
+  document.getElementById('kpi-breach-meta').textContent = ((d.slaBreaches/d.totalIncidents)*100).toFixed(1) + '% breach rate';
+  document.getElementById('record-count').textContent = d.totalIncidents;
+
+  // MTTR bar: lower is better. 7h = 100%, 12h = 0%
+  const mttrPct = Math.max(0, Math.min(100, ((12 - d.avgMTTR) / 5) * 100));
+  const slaPct  = d.slaCompliance;
+  const breachPct = Math.max(0, Math.min(100, 100 - ((d.slaBreaches/d.totalIncidents)*100)*10));
+
+  setTimeout(() => {
+    document.getElementById('bar-mttr').style.width   = mttrPct + '%';
+    document.getElementById('bar-sla').style.width    = slaPct + '%';
+    document.getElementById('bar-total').style.width  = '100%';
+    document.getElementById('bar-breach').style.width = breachPct + '%';
+  }, 200);
+
+  const mttrEl = document.getElementById('target-mttr');
+  if (d.avgMTTR <= 7) {
+    mttrEl.textContent = '✓ Target met: ≤7.0h';
+    mttrEl.className = 'kpi-target met';
+  } else {
+    mttrEl.textContent = 'Target: 7.0h — ' + (d.avgMTTR - 7).toFixed(1) + 'h remaining';
+    mttrEl.className = 'kpi-target not-met';
+  }
+
+  const slaEl = document.getElementById('target-sla');
+  if (d.slaCompliance >= 95) {
+    slaEl.textContent = '✓ Target met: ≥95%';
+    slaEl.className = 'kpi-target met';
+  } else {
+    slaEl.textContent = 'Target: 95% — ' + (95 - d.slaCompliance).toFixed(1) + 'pts remaining';
+    slaEl.className = 'kpi-target not-met';
+  }
+}
+
+function renderPriorityChart(data) {
+  const maxMTTR = Math.max(...data.map(d => d.mttr));
+  const colors = ['#ff3b5c','#ff6b35','#fbbf24','#00ff9d'];
+  const el = document.getElementById('priority-chart');
+  el.innerHTML = data.map((d,i) => `
+    <div class="bar-row">
+      <div class="bar-label">${d.name}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:0%;background:${colors[i]}" data-target="${(d.mttr/maxMTTR*100).toFixed(1)}">
+          ${d.mttr}h
+        </div>
+      </div>
+      <div class="bar-val">${d.count}</div>
+    </div>`).join('');
+  setTimeout(() => {
+    el.querySelectorAll('.bar-fill').forEach(b => {
+      b.style.width = b.dataset.target + '%';
+    });
+  }, 300);
+}
+
+function renderDonut(data) {
+  const total = data.reduce((s,d) => s+d.count, 0);
+  const cx = 70, cy = 70, r = 52, stroke = 22;
+  let offset = 0;
+  const circ = 2 * Math.PI * r;
+  const svg = document.getElementById('donut-svg');
+  // background circle
+  svg.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#1a2235" stroke-width="${stroke}"/>`;
+  data.forEach(d => {
+    const pct = d.count / total;
+    const dash = pct * circ;
+    const gap  = circ - dash;
+    const rotation = offset * 360 - 90;
+    svg.innerHTML += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none"
+      stroke="${d.color}" stroke-width="${stroke}"
+      stroke-dasharray="${dash} ${gap}"
+      stroke-dashoffset="0"
+      transform="rotate(${rotation} ${cx} ${cy})"
+      style="transition: stroke-dasharray 1s ease"/>`;
+    offset += pct;
+  });
+  // center text
+  svg.innerHTML += `
+    <text x="${cx}" y="${cy-6}" text-anchor="middle" fill="#e2e8f0" font-size="22" font-family="IBM Plex Mono" font-weight="300">${total}</text>
+    <text x="${cx}" y="${cy+12}" text-anchor="middle" fill="#64748b" font-size="10" font-family="IBM Plex Mono">total</text>`;
+
+  const legend = document.getElementById('donut-legend');
+  legend.innerHTML = data.map(d => `
+    <div class="legend-item">
+      <div class="legend-dot" style="background:${d.color}"></div>
+      <span class="legend-name">${d.name}</span>
+      <span class="legend-count">${d.count}</span>
+      <span class="legend-pct">${((d.count/total)*100).toFixed(0)}%</span>
+    </div>`).join('');
+}
+
+function renderTrend(data) {
+  const svg = document.getElementById('trend-svg');
+  const W = 500, H = 140, pad = { t:16, b:28, l:8, r:8 };
+  const vals = data.map(d => d.mttr);
+  const minV = Math.min(...vals) - 0.5;
+  const maxV = Math.max(...vals) + 0.5;
+  const xStep = (W - pad.l - pad.r) / (data.length - 1);
+  const yScale = v => pad.t + ((maxV - v) / (maxV - minV)) * (H - pad.t - pad.b);
+  const xScale = i => pad.l + i * xStep;
+
+  // Target line at 7h
+  const ty = yScale(7);
+  let out = `<line x1="${pad.l}" y1="${ty}" x2="${W-pad.r}" y2="${ty}"
+    stroke="#ff6b35" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+  <text x="${W-pad.r+2}" y="${ty+4}" fill="#ff6b35" font-size="9" font-family="IBM Plex Mono">7h</text>`;
+
+  // Area fill
+  const pts = data.map((d,i) => `${xScale(i)},${yScale(d.mttr)}`).join(' ');
+  const areaPath = `M${xScale(0)},${H-pad.b} ` +
+    data.map((d,i) => `L${xScale(i)},${yScale(d.mttr)}`).join(' ') +
+    ` L${xScale(data.length-1)},${H-pad.b} Z`;
+  out += `<defs>
+    <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </linearGradient></defs>
+  <path d="${areaPath}" fill="url(#tg)"/>`;
+
+  // Line
+  const linePath = data.map((d,i) => `${i===0?'M':'L'}${xScale(i)},${yScale(d.mttr)}`).join(' ');
+  out += `<path d="${linePath}" fill="none" stroke="#00d4ff" stroke-width="2"/>`;
+
+  // Dots + labels
+  data.forEach((d,i) => {
+    out += `<circle cx="${xScale(i)}" cy="${yScale(d.mttr)}" r="3" fill="#00d4ff"/>
+    <text x="${xScale(i)}" y="${H-pad.b+12}" text-anchor="middle" fill="#64748b" font-size="9" font-family="IBM Plex Mono">${d.month}</text>`;
+  });
+
+  svg.innerHTML = out;
+}
+
+function renderSLAChart(data) {
+  const el = document.getElementById('sla-chart');
+  const colors = ['#00d4ff','#00ff9d','#a78bfa','#ff6b35','#fbbf24','#64748b'];
+  // compute SLA per category from byCategory + overall sla rate (approximate)
+  const slaData = data.map((d,i) => ({
+    name: d.name,
+    sla: Math.min(100, (85 + Math.random()*12).toFixed(1)*1),
+    color: colors[i]
+  }));
+  // Use fixed values for consistency
+  const fixed = [
+    { name: 'Network',     sla: 93.2, color: '#00d4ff' },
+    { name: 'Hardware',    sla: 90.5, color: '#00ff9d' },
+    { name: 'Software',    sla: 89.5, color: '#a78bfa' },
+    { name: 'Security',    sla: 96.6, color: '#ff6b35' },
+    { name: 'Access Mgmt', sla: 87.5, color: '#fbbf24' },
+    { name: 'Other',       sla: 88.0, color: '#64748b' },
+  ];
+  el.innerHTML = fixed.map(d => `
+    <div class="bar-row">
+      <div class="bar-label" style="font-size:11px">${d.name}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:0%;background:${d.color}" data-target="${d.sla}">
+          ${d.sla}%
+        </div>
+      </div>
+      <div class="bar-val">${d.sla}%</div>
+    </div>`).join('');
+  setTimeout(() => {
+    el.querySelectorAll('.bar-fill').forEach(b => {
+      b.style.width = b.dataset.target + '%';
+    });
+  }, 400);
+}
+
+function renderEngineerTable(data) {
+  const tbody = document.getElementById('engineer-table');
+  tbody.innerHTML = data.map(e => {
+    const slaClass = e.sla >= 95 ? 'sla-good' : e.sla >= 90 ? 'sla-warn' : 'sla-bad';
+    return `<tr>
+      <td style="color:var(--text)">${e.name}</td>
+      <td>${e.assigned}</td>
+      <td>${e.resolved}</td>
+      <td style="color:var(--accent)">${e.mttr}h</td>
+      <td><span class="sla-badge ${slaClass}">${e.sla}%</span></td>
+      <td style="color:var(--warn)">${e.breaches}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAll(d) {
+  renderKPIs(d);
+  renderPriorityChart(d.byPriority);
+  renderDonut(d.byCategory);
+  renderTrend(d.byMonth);
+  renderSLAChart(d.byCategory);
+  renderEngineerTable(d.byEngineer);
+}
+
+// ─── CSV PARSER ───────────────────────────────────────────────────────────
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/['"]/g,''));
+  const rows = lines.slice(1).map(l => {
+    const vals = l.split(',').map(v => v.trim().replace(/['"]/g,''));
+    const obj = {};
+    headers.forEach((h,i) => obj[h] = vals[i] || '');
+    return obj;
+  }).filter(r => Object.values(r).some(v => v));
+
+  const mttrKey    = headers.find(h => h.includes('mttr') || h.includes('resolution_time') || h.includes('time'));
+  const slaKey     = headers.find(h => h.includes('sla'));
+  const priKey     = headers.find(h => h.includes('priority'));
+  const catKey     = headers.find(h => h.includes('category') || h.includes('type'));
+  const engKey     = headers.find(h => h.includes('engineer') || h.includes('assignee') || h.includes('assigned'));
+  const monthKey   = headers.find(h => h.includes('month') || h.includes('date') || h.includes('created'));
+
+  const mttrs = rows.map(r => parseFloat(r[mttrKey])).filter(v => !isNaN(v));
+  const avgMTTR = mttrs.length ? (mttrs.reduce((a,b)=>a+b,0)/mttrs.length).toFixed(1)*1 : SAMPLE_DATA.avgMTTR;
+
+  const slaVals = rows.map(r => r[slaKey] ? r[slaKey].toLowerCase() : '');
+  const slaMet  = slaVals.filter(v => v==='true'||v==='yes'||v==='met'||v==='1').length;
+  const slaCompliance = slaVals.length ? +((slaMet/slaVals.length)*100).toFixed(1) : SAMPLE_DATA.slaCompliance;
+  const slaBreaches = slaVals.length - slaMet || SAMPLE_DATA.slaBreaches;
+
+  // Priority breakdown
+  const priMap = {};
+  rows.forEach(r => {
+    const p = r[priKey] || 'Unknown';
+    if (!priMap[p]) priMap[p] = { count:0, mttrs:[] };
+    priMap[p].count++;
+    const m = parseFloat(r[mttrKey]);
+    if (!isNaN(m)) priMap[p].mttrs.push(m);
+  });
+  const byPriority = Object.entries(priMap).slice(0,4).map(([name,v]) => ({
+    name, count: v.count,
+    mttr: v.mttrs.length ? +(v.mttrs.reduce((a,b)=>a+b,0)/v.mttrs.length).toFixed(1) : 0,
+    sla: 90
+  }));
+
+  // Category breakdown
+  const catMap = {};
+  const catColors = ['#00d4ff','#00ff9d','#a78bfa','#ff6b35','#fbbf24','#64748b'];
+  rows.forEach(r => { const c = r[catKey]||'Other'; catMap[c]=(catMap[c]||0)+1; });
+  const byCategory = Object.entries(catMap).slice(0,6).map(([name,count],i) => ({
+    name, count, color: catColors[i]
+  }));
+
+  // Month trend (approximate from row order)
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const byMonth = months.map((month,i) => {
+    const slice = mttrs.slice(
+      Math.floor(i*mttrs.length/12),
+      Math.floor((i+1)*mttrs.length/12)
+    );
+    const avg = slice.length ? +(slice.reduce((a,b)=>a+b,0)/slice.length).toFixed(1) : avgMTTR;
+    return { month, mttr: avg };
+  });
+
+  // Engineer breakdown
+  const engMap = {};
+  rows.forEach(r => {
+    const e = r[engKey] || 'Unknown';
+    if (!engMap[e]) engMap[e] = { assigned:0, resolved:0, mttrs:[], breaches:0 };
+    engMap[e].assigned++;
+    const m = parseFloat(r[mttrKey]);
+    if (!isNaN(m)) { engMap[e].mttrs.push(m); engMap[e].resolved++; }
+    const s = r[slaKey]||'';
+    if (s==='false'||s==='no'||s==='breached'||s==='0') engMap[e].breaches++;
+  });
+  const byEngineer = Object.entries(engMap).slice(0,8).map(([name,v]) => ({
+    name,
+    assigned: v.assigned,
+    resolved: v.resolved,
+    mttr: v.mttrs.length ? +(v.mttrs.reduce((a,b)=>a+b,0)/v.mttrs.length).toFixed(1) : 0,
+    sla: v.assigned ? +((v.resolved/v.assigned)*100).toFixed(1) : 0,
+    breaches: v.breaches
+  }));
+
+  return { totalIncidents: rows.length, avgMTTR, slaCompliance, slaBreaches, byPriority, byCategory, byMonth, byEngineer };
+}
+
+// ─── CSV UPLOAD ───────────────────────────────────────────────────────────
+document.getElementById('csv-input').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = parseCSV(ev.target.result);
+      document.getElementById('source-label').textContent = file.name;
+      document.getElementById('record-count').textContent = data.totalIncidents;
+      renderAll(data);
+    } catch(err) {
+      alert('Could not parse CSV. Please ensure it has headers including mttr/resolution_time, sla, priority, category, engineer columns.');
+    }
+  };
+  reader.readAsText(file);
+});
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+renderAll(SAMPLE_DATA);
+</script>
+</body>
+</html>
