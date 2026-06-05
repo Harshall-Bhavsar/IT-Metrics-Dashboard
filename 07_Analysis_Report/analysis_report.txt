@@ -214,10 +214,4 @@ The three interventions that would close the gap fastest:
 With these three changes in place, achieving 95% overall SLA compliance
 within one quarter is realistic based on the current data trajectory.
 
-
-================================================
-END OF REPORT
-Author: Harshall Bhavsar | Business Analyst Portfolio
-Project: IT Metrics Dashboard
-GitHub: github.com/Harshall-Bhavsar/IT-Metrics-Dashboard
-================================================
+=====================================================================================
