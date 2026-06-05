@@ -1,5 +1,7 @@
 # IT Metrics Dashboard
 **Business Analysis Portfolio Project**
+
+
 Author: Harshal Bhavsar | Business Analyst | ITSM | ITIL | ServiceNow
 
 🔴 **[Live Dashboard →](https://harshall-bhavsar.github.io/IT-Metrics-Dashboard/06_Dashboard/index.html)**
@@ -10,7 +12,7 @@ Author: Harshal Bhavsar | Business Analyst | ITSM | ITIL | ServiceNow
 
 An end-to-end Business Analysis portfolio project for a 250-person IT services company struggling with manual reporting, poor SLA visibility, and reactive incident management.
 
-This project covers the full BA lifecycle: problem definition, requirements gathering, process mapping, system design, and proof-of-concept scripting.
+This project covers the full BA lifecycle: problem definition, requirements gathering, process mapping, system design, SQL analysis, and live dashboard delivery.
 
 ---
 
@@ -35,8 +37,8 @@ A real-time IT Metrics Dashboard integrating with the ticketing system to provid
 ## Business Impact (From BRD)
 
 ```
-MTTR:              10.2h  →  7.0h      (31% improvement)
-SLA Compliance:     82%   →  95%+      (+13 points)
+MTTR:              10.2h  →  7.0h      (31% improvement target)
+SLA Compliance:     82%   →  95%+      (+13 points target)
 Reporting Time:    6-8h/week → 30 min  (95% reduction)
 ROI:               4-5 month payback
 Annual Benefit:    $135,000+
@@ -50,8 +52,9 @@ Annual Benefit:    $135,000+
 IT-Metrics-Dashboard/
 │
 ├── README.md
+├── PROJECT_STATUS.md
 │
-├── BRD/
+├── 01_BRD/
 │   └── 01_Business_Requirements_Document.pdf
 │
 ├── 02_User_Stories/
@@ -63,19 +66,19 @@ IT-Metrics-Dashboard/
 │   ├── 02_Problem_Management_Process.md
 │   └── 03_Change_Management_Process.md
 │
-├── 04_System_Architecture/          ← Coming Week 3
+├── 04_System_Architecture/
 │   └── 04_System_Architecture.md
 │
-├── 05_Python_Analysis/              ← Coming Week 3
-│   ├── analyze_incidents.py
-│   ├── sample_incidents.csv
-│   └── reports/
+├── 05_SQL_Analysis/
+│   ├── schema.sql
+│   ├── incident_queries.sql
+│   └── sample_incidents.csv
 │
-├── 06_Dashboard/                    ← Coming Week 3
+├── 06_Dashboard/
 │   └── index.html
 │
-└── 07_Analysis_Report/              ← Coming Week 3
-    └── analysis_report.md
+└── 07_Analysis_Report/
+    └── analysis_report.txt
 ```
 
 ---
@@ -84,16 +87,30 @@ IT-Metrics-Dashboard/
 
 | # | Deliverable | Status | Link |
 |---|------------|--------|------|
-| 1 | Business Requirements Document | ✅ Complete | [View BRD](BRD/01_Business_Requirements_Document.pdf) |
-| 2 | User Stories (11 stories, 32 pts) | ✅ Complete | [View User Stories](02_User_Stories/02_User_Stories.pdf) |
+| 1 | Business Requirements Document | ✅ Complete | [View BRD](01_BRD/01_Business_Requirements_Document.pdf) |
+| 2 | User Stories (10 stories, 31 pts) | ✅ Complete | [View User Stories](02_User_Stories/02_User_Stories.pdf) |
 | 3 | Incident Management Process Map | ✅ Complete | [View](03_Process_Maps/01_Incident_Management_Process.md) |
 | 4 | Problem Management Process Map | ✅ Complete | [View](03_Process_Maps/02_Problem_Management_Process.md) |
 | 5 | Change Management Process Map | ✅ Complete | [View](03_Process_Maps/03_Change_Management_Process.md) |
 | 6 | Process Maps Master Index | ✅ Complete | [View](03_Process_Maps/00_Process_Maps_Index.md) |
-| 7 | System Architecture Diagram | 🔄 In Progress | Coming Week 3 |
-| 8 | Python Analysis Script | 🔄 In Progress | Coming Week 3 |
-| 9 | Live KPI Dashboard | 🔄 In Progress | Coming Week 3 |
-| 10 | Analysis Report & Recommendations | 🔄 In Progress | Coming Week 3 |
+| 7 | System Architecture Document | ✅ Complete | [View](04_System_Architecture/04_System_Architecture.md) |
+| 8 | SQL Schema + Analysis Queries | ✅ Complete | [View](05_SQL_Analysis/incident_queries.sql) |
+| 9 | Live KPI Dashboard | ✅ Complete | [View](06_Dashboard/index.html) |
+| 10 | Incident Analysis Report | ✅ Complete | [View](07_Analysis_Report/analysis_report.txt) |
+| 11 | Stakeholder Presentation | 🔄 In Progress | Coming Day 11 |
+| 12 | Case Study Narrative | 🔄 In Progress | Coming Day 12 |
+
+---
+
+## Key Findings (From SQL Analysis)
+
+| Metric | Baseline | Current | Target | Gap |
+|--------|---------|---------|--------|-----|
+| Overall SLA Compliance | 82.0% | 84.0% | 95.0% | -11.0pts |
+| P1 SLA Compliance | — | 54.2% | 95.0% | -40.8pts |
+| P2 SLA Compliance | — | 36.4% | 95.0% | -58.6pts |
+| Server Category SLA | — | 71.9% | 95.0% | -23.1pts |
+| Database Category SLA | — | 75.0% | 95.0% | -20.0pts |
 
 ---
 
@@ -107,6 +124,17 @@ IT-Metrics-Dashboard/
 
 ---
 
+## Technology Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Database | SQL Server 2025 |
+| Query Tool | SSMS 22 |
+| Dashboard | HTML / CSS / JS / Chart.js |
+| Documentation | Markdown + PDF |
+
+---
+
 ## Skills Demonstrated
 
 - Business Requirements Documentation (BRD)
@@ -114,11 +142,28 @@ IT-Metrics-Dashboard/
 - As-Is / To-Be process mapping
 - Gap analysis and pain point identification
 - ITIL v4 process alignment
-- System architecture (BA-level)
-- Python scripting for data analysis
-- KPI definition and metrics design
+- System architecture design (BA-level)
+- SQL Server — schema design and analytical queries
+- KPI definition and metrics analysis
 - Stakeholder perspective mapping
 - ROI and business case analysis
+
+---
+
+## How to Run the SQL Analysis
+
+```sql
+-- 1. Restore schema
+-- Run schema.sql in SSMS to create the database and table
+
+-- 2. Import data
+BULK INSERT dbo.incidents
+FROM 'your_path\sample_incidents.csv'
+WITH (FIRSTROW = 2, FIELDTERMINATOR = ',', ROWTERMINATOR = '\n', TABLOCK);
+
+-- 3. Run analysis
+-- Open incident_queries.sql and execute section by section
+```
 
 ---
 
