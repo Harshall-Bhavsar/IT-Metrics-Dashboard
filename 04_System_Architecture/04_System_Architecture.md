@@ -201,6 +201,3 @@ T-SQL Analytical Queries
 | Browser support | Chrome, Edge, Firefox (modern versions) |
 
 ---
-
-*Document version 1.0 — IT Metrics Dashboard Portfolio*  
-*Author: Harshall Bhavsar | github.com/Harshall-Bhavsar/IT-Metrics-Dashboard*
