@@ -1,0 +1,223 @@
+IT METRICS DASHBOARD — INCIDENT ANALYSIS REPORT
+================================================
+Author: Harshall Bhavsar | Business Analyst
+Project: IT Metrics Dashboard Portfolio
+Tool: SQL Server 2025 (T-SQL) + SSMS 22
+Data: 200 Incidents | Feb–May 2026
+================================================
+
+
+EXECUTIVE SUMMARY
+-----------------
+This report presents findings from a structured SQL-based analysis of 200
+incidents logged by a 250-person IT services company. The analysis measures
+current ITSM performance against BRD-defined targets, identifies root causes
+of SLA breaches, and provides prioritised recommendations for improvement.
+
+Current state: Overall MTTR at 17.6h (weighted across all priorities) and
+SLA compliance at 84.0%. The headline MTTR figure is influenced heavily by
+the P3/P4 incident mix. The critical finding is that P1 and P2 incidents —
+the highest impact tickets — are failing SLA at alarming rates of 54.2% and
+36.4% respectively, while P3 and P4 incidents achieve 100% compliance.
+
+
+------------------------------------------------
+SECTION 1: OVERALL KPI PERFORMANCE
+------------------------------------------------
+
+Metric               Baseline    Current     Target      Status
+---------------------------------------------------------------
+Avg MTTR (all)       10.2h       17.6h       7.0h        Below target
+SLA Compliance       82.0%       84.0%       95.0%       Below target
+SLA Met              --          168         --          --
+SLA Breaches         --          32          0 ideal     32 breaches
+Total Incidents      --          200         --          --
+
+Note on MTTR: The 17.6h average is weighted across all priority tiers.
+P3 (24h SLA) and P4 (48h SLA) incidents make up 71.5% of the dataset,
+pulling the average up. Priority-level MTTR analysis in Section 2 provides
+the more meaningful view for operational decision-making.
+
+SLA improvement of 2 percentage points over baseline (82% → 84%) indicates
+marginal progress. The 11-point gap to the 95% target requires structural
+intervention, not incremental improvement.
+
+
+------------------------------------------------
+SECTION 2: FINDINGS BY PRIORITY
+------------------------------------------------
+
+Priority  Count  % Share  Avg MTTR  SLA Met  Breached  Compliance
+------------------------------------------------------------------
+P1        24     12.0%    3.8h      13       11        54.2%
+P2        33     16.5%    8.9h      12       21        36.4%
+P3        84     42.0%    16.3h     84       0         100.0%
+P4        59     29.5%    29.8h     59       0         100.0%
+
+Finding 1 — P2 is the single biggest SLA failure at 36.4% compliance.
+21 out of 33 P2 incidents breached SLA. P2 incidents carry an 8-hour
+target — tight enough to miss under workload pressure but not urgent
+enough to trigger emergency escalation. They fall into a gap in the
+response model.
+
+Finding 2 — P1 compliance at 54.2% is unacceptable for critical incidents.
+11 out of 24 P1 incidents breached their SLA. These are the highest-impact
+tickets in the system. An organisation cannot claim effective incident
+management when it fails more than half its critical incidents.
+
+Finding 3 — P3 and P4 achieve perfect SLA compliance.
+Both tiers hit 100% compliance, largely because their SLA windows (24h
+and 48h) are generous relative to actual resolution times of 16.3h and
+29.8h. This is positive but masks the P1/P2 crisis.
+
+
+------------------------------------------------
+SECTION 3: FINDINGS BY CATEGORY
+------------------------------------------------
+
+Category     Count  Avg MTTR  Breaches  Compliance
+--------------------------------------------------
+Server       32     18.7h     9         71.9%
+Database     40     16.9h     10        75.0%
+Application  31     16.3h     5         83.9%
+Security     28     18.9h     3         89.3%
+Network      30     15.2h     3         90.0%
+Hardware     39     19.2h     2         94.9%
+
+Finding 4 — Server is the worst performing category at 71.9% compliance.
+9 out of 32 Server incidents breached SLA. Server incidents typically
+involve infrastructure-level failures requiring specialist knowledge and
+often physical intervention. The 18.7h average MTTR confirms resolution
+is slow and complex.
+
+Finding 5 — Database is the highest volume problem category.
+40 incidents — the most of any category — with only 75.0% SLA compliance
+and 10 breaches. Database incidents are likely recurring (query performance,
+connection failures, backup issues) and would benefit most from a Known
+Error Database (KEDB) with documented fixes.
+
+Finding 6 — Hardware is the best performing category at 94.9% compliance.
+Only 2 breaches from 39 incidents. Hardware issues appear well-handled,
+possibly because they are easier to diagnose and have clear resolution paths.
+This category can serve as a model for others.
+
+
+------------------------------------------------
+SECTION 4: ENGINEER PERFORMANCE
+------------------------------------------------
+
+Engineer     Assigned  Avg MTTR  SLA Met  Compliance
+-----------------------------------------------------
+D. Rao       32        14.5h     23       71.9%
+A. Kulkarni  32        16.4h     25       78.1%
+R. Sharma    40        16.3h     33       82.5%
+P. Nair      25        20.2h     21       84.0%
+S. Patil     40        20.6h     37       92.5%
+M. Joshi     31        17.7h     29       93.5%
+
+Finding 7 — D. Rao and A. Kulkarni have the lowest SLA compliance.
+Both engineers handle 32 incidents each with compliance of 71.9% and
+78.1% respectively. Before concluding this is a performance issue, the
+category and priority mix of their assignments must be reviewed — they
+may be disproportionately assigned to Server and P1/P2 incidents.
+
+Finding 8 — R. Sharma and S. Patil carry the highest workload at 40 each.
+The top two most loaded engineers. Workload concentration creates risk —
+if either engineer is unavailable, incident queue management degrades
+significantly.
+
+Finding 9 — S. Patil and M. Joshi are the strongest performers.
+92.5% and 93.5% compliance respectively. Their assignment patterns,
+working methods, and escalation behaviour should be documented and used
+for team-wide training.
+
+
+------------------------------------------------
+SECTION 5: ROOT CAUSE ANALYSIS
+------------------------------------------------
+
+Root Cause 1 — No P1/P2 escalation fast-track (highest impact)
+The data shows P3/P4 achieving 100% SLA while P1/P2 fail badly. This
+indicates the organisation lacks a dedicated fast-track escalation path
+for critical incidents. P1/P2 tickets enter the same queue as lower
+priority work and compete for engineer attention.
+Evidence: P1 at 54.2%, P2 at 36.4% vs P3/P4 at 100%.
+
+Root Cause 2 — No KEDB for recurring Database and Server incidents
+Database (10 breaches) and Server (9 breaches) account for 59% of all
+SLA failures. These categories have recurring incident patterns —
+connection failures, query degradation, NTP sync failures — that are
+likely being re-diagnosed each time instead of resolved via documented
+known-error fixes.
+Evidence: Database 75.0% SLA, Server 71.9% SLA, highest breach counts.
+
+Root Cause 3 — Uneven workload distribution
+Two engineers carry 40 incidents each while one carries only 25. Uneven
+distribution leads to queue backlog for overloaded engineers, directly
+increasing MTTR for their assigned tickets.
+Evidence: P. Nair at 25 assigned vs R. Sharma and S. Patil at 40 each.
+
+Root Cause 4 — No real-time SLA visibility
+Without a live dashboard, P1/P2 breaches are discovered after the fact.
+The resolution window closes before anyone acts. Real-time alerting at
+the 50% and 75% SLA consumption mark would allow proactive intervention.
+
+
+------------------------------------------------
+SECTION 6: RECOMMENDATIONS
+------------------------------------------------
+
+Priority  Recommendation                           Expected Impact
+-----------------------------------------------------------------
+1         Implement P1/P2 dedicated queue          Close 54%/36% compliance gap
+2         Deploy real-time SLA breach alerts       Catch breaches before they close
+3         Build KEDB for Server and Database       Reduce 59% of all SLA breaches
+4         Rebalance engineer workload              Reduce queue backlog for top 2
+5         Document M. Joshi/S. Patil practices    Raise team-wide compliance floor
+6         Link change records to incidents         Identify change-induced failures
+
+
+------------------------------------------------
+SECTION 7: GAP ANALYSIS — CURRENT VS TARGET
+------------------------------------------------
+
+KPI                  Current    Target    Gap          Priority
+--------------------------------------------------------------
+Overall SLA          84.0%      95.0%     -11.0pts     Critical
+P1 SLA Compliance    54.2%      95.0%     -40.8pts     Critical
+P2 SLA Compliance    36.4%      95.0%     -58.6pts     Critical
+Server SLA           71.9%      95.0%     -23.1pts     High
+Database SLA         75.0%      95.0%     -20.0pts     High
+D. Rao SLA           71.9%      85.0%     -13.1pts     Medium
+
+
+------------------------------------------------
+SECTION 8: CONCLUSION
+------------------------------------------------
+
+The data exposes a split-personality ITSM operation: excellent at managing
+low-priority, low-urgency tickets (P3/P4 at 100% SLA) and poor at managing
+the tickets that matter most to the business (P1 at 54.2%, P2 at 36.4%).
+
+This is not a capacity problem — it is a process and visibility problem.
+The engineers are present and resolving tickets. The failure is in how
+critical incidents are triaged, escalated, and tracked in real time.
+
+The three interventions that would close the gap fastest:
+
+1. Dedicated P1/P2 escalation queue — immediate impact on the 58.6pt P2 gap
+2. Real-time dashboard with SLA countdown alerts — prevents breaches
+   from going unnoticed until after the window closes
+3. KEDB for Server and Database — eliminates re-diagnosis of known issues
+   which account for 59% of all SLA breaches
+
+With these three changes in place, achieving 95% overall SLA compliance
+within one quarter is realistic based on the current data trajectory.
+
+
+================================================
+END OF REPORT
+Author: Harshall Bhavsar | Business Analyst Portfolio
+Project: IT Metrics Dashboard
+GitHub: github.com/Harshall-Bhavsar/IT-Metrics-Dashboard
+================================================
