@@ -1,8 +1,8 @@
 # IT Metrics Dashboard
 **Business Analysis Portfolio Project**
+Author: Harshal Bhavsar | Business Analyst | ITSM | ITIL | ServiceNow
 
-
-Author: Harshall Bhavsar | Business Analyst | ITSM | ITIL | ServiceNow
+🔴 **[Live Dashboard →](https://harshall-bhavsar.github.io/IT-Metrics-Dashboard/06_Dashboard/index.html)**
 
 ---
 
